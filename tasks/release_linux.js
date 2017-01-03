@@ -39,7 +39,7 @@ var moveDat = function () {
     return projectDir.moveAsync(readyAppDir.path()+'/icudtl.dat', releasesDir.path()+'/icudtl.dat')
 }
 
-var movePack = function () {
+var movePak = function () {
     return projectDir.moveAsync(readyAppDir.path()+'/nw.pak', releasesDir.path()+'/nw.pak')
 }
 
@@ -81,7 +81,7 @@ module.exports = function () {
     .then(copyRuntime)
     .then(copyBuiltApp)
     .then(moveDat)
-    .then(movePack)
+    .then(movePak)
     .then(packToFile)
     .then(cleanClutter);
 };
