@@ -35,6 +35,14 @@ var copyBuiltApp = function () {
     return projectDir.copyAsync('build', readyAppDir.path(), { overwrite: true });
 };
 
+var moveDat = function () {
+    return projectDir.moveAsync(readyAppDir.path()+'/icudtl.dat', releasesDir.path()+'/icudtl.dat')
+}
+
+var movePack = function () {
+    return projectDir.moveAsync(readyAppDir.path()+'/nw.pak', releasesDir.path()+'/nw.pak')
+}
+
 var packToFile = function () {
     var deferred = Q.defer();
 
@@ -48,7 +56,7 @@ var packToFile = function () {
     var appSize = Math.round(readyAppDir.inspectTree('.').size / 1024);
 
     // Build the zip...
-    childProcess.execSync('zip ' + zipPath + ' ' + readyAppDir.path());
+    childProcess.execSync('zip -r ' + zipPath + ' ' + readyAppDir.path());
     childProcess.execSync('cat '+ nw.findpath() + ' ' + zipPath + ' > ' + outPath + ' && chmod +x ' + outPath,
         function (error, stdout, stderr) {
             if (error || stderr) {
@@ -72,6 +80,8 @@ module.exports = function () {
     return init()
     .then(copyRuntime)
     .then(copyBuiltApp)
+    .then(moveDat)
+    .then(movePack)
     .then(packToFile)
     .then(cleanClutter);
 };
